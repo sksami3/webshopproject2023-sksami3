@@ -1,6 +1,7 @@
 import './App.css';
+import 'font-awesome/css/font-awesome.min.css';
 import { Component } from 'react';
-import Header from './components/HeaderComponent';
+import Main from './components/MainComponent';
 import { BrowserRouter } from 'react-router-dom';
 
 class App extends Component {
@@ -9,7 +10,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <Header />
+          <Main />
         </div>
       </BrowserRouter>
     );
