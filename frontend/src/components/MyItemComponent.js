@@ -8,10 +8,14 @@ import {
   Breadcrumb,
   BreadcrumbItem,
 } from "reactstrap";
+import { useNavigate } from 'react-router-dom';
 
 function RenderMyItems({ item, onClk }) {
+  const navigation = useNavigate();
+
   const handleButtonClick = (item) => {
     console.log("Button clicked for item:", item);
+    navigation('/editItem/' + item.id);
   };
 
   return (
