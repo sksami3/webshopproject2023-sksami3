@@ -43,12 +43,16 @@ const MyItems = (props) => {
       <div className="row">
         <Breadcrumb>
           <BreadcrumbItem>
-            <Link to="/myItems">MyItems</Link>
+            <Link to="/">Items</Link>
           </BreadcrumbItem>
-          <BreadcrumbItem active>MyItems</BreadcrumbItem>
+          <BreadcrumbItem active>My Items</BreadcrumbItem>
         </Breadcrumb>
         <div className="col-12">
-          <h3>MyItems</h3>
+          <Link to="/AddItem">Add New Item</Link>
+          <hr />
+        </div>
+        <div className="col-12">
+          <h3>My Items</h3>
           <hr />
         </div>
       </div>

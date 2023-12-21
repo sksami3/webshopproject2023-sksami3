@@ -1,5 +1,6 @@
 // import './App.css';
 import Shop from './ShopComponent';
+import AddItem from './AddItemComponent';
 import MyItems from './MyItemComponent';
 import { ITEMS } from '../shared/items';
 import { Component } from 'react';
@@ -31,6 +32,7 @@ class Main extends Component {
                 <Routes>
                     <Route exact path="/shop" element={<Shop items={this.state.items} />} />
                     <Route path="/item/:itemId" element={<ItemWithId />} />
+                    <Route path="/addItem" element={<AddItem />} />
                     <Route path="/myitems" element={<MyItems items={this.state.items.filter((item) => item.createdBy === parseInt(122, 10))} />} />
                     <Route path="/" element={<Shop items={this.state.items} />} />
                 </Routes>
