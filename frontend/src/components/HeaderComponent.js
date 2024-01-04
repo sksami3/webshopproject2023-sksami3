@@ -1,7 +1,4 @@
-import "bootstrap/js/src/collapse.js";
-import "bootstrap/dist/css/bootstrap.css";
-import React, { Component } from "react";
-import { Row, Column } from "react-foundation";
+import React, { useState, useContext } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -19,148 +16,132 @@ import {
   Form,
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
+import { CartContext } from "../context/cart.js";
+import Cart from "./Cart.js";
 
-class Header extends Component {
-  constructor(props) {
-    super(props);
+const Header = () => {
+  const { cartItems } = useContext(CartContext);
+  const [isNavOpen, setNavOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [showModal, setshowModal] = useState(false);
 
-    this.toggleNav = this.toggleNav.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
-    this.state = {
-      isNavOpen: false,
-      isModalOpen: false,
-    };
-  }
+  const toggleNav = () => {
+    setNavOpen(!isNavOpen);
+  };
 
-  toggleNav() {
-    this.setState({
-      isNavOpen: !this.state.isNavOpen,
-    });
-  }
+  const toggleModal = () => {
+    setModalOpen(!isModalOpen);
+  };
 
-  toggleModal() {
-    this.setState({
-      isModalOpen: !this.state.isNavOpen,
-    });
-  }
-
-  handleLogin(event) {
-    this.toggleModal();
+  const handleLogin = (event) => {
+    toggleModal();
     alert(
       "Username: " +
-        this.username.value +
+        event.target.username.value +
         " Password: " +
-        this.password.value +
+        event.target.password.value +
         " Remember: " +
-        this.remember.checked
+        event.target.remember.checked
     );
+    event.preventDefault();
+  };
 
-    // event.preventDefault();
-  }
+  const toggle = () => {
+    setshowModal(!showModal);
+  };
 
-  render() {
-    return (
-      <div>
-        <Navbar dark expand="md">
-          <div className="container">
-            <NavbarToggler onClick={this.toggleNav} />
-            <NavbarBrand className="mr-auto" href="/">
-              {/* <img
+  return (
+    <div>
+      <Navbar dark expand="md">
+        <div className="container">
+          <NavbarToggler onClick={toggleNav} />
+          <NavbarBrand className="mr-auto" href="/">
+            {/* <img
                 src="assets/images/logo.png"
                 height="30"
                 width="41"
                 alt="Ristorante Con Fusion"
               /> */}
-            </NavbarBrand>
-            <Collapse isOpen={this.state.isNavOpen} navbar>
-              <Nav navbar>
-                <NavItem>
-                  <NavLink className="nav-link" to="/shop">
-                    <span className="fa fa-home fa-lg"></span> Shop
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink className="nav-link" to="/myitems">
-                    <span className="fa fa-info fa-lg"></span> My Items
-                  </NavLink>
-                </NavItem>
-              </Nav>
-              <Nav className="ms-auto" navbar>
-                <NavItem>
-                  <NavLink className="nav-link" to="/signUp">
-                    <span className="fa fa-list fa-lg"></span> Sign Up
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink className="nav-link" to="/editAccount">
-                    <span className="fa fa-address-card fa-lg"></span> Edit
-                    Account
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <Button outline onClick={this.toggleModal}>
-                    <span className="fa fa-sign-in fa-lg"></span> Login
-                  </Button>
-                </NavItem>
-              </Nav>
-            </Collapse>
-          </div>
-        </Navbar>
-        <div className="jumbotron">
-          <div className="container">
-            <div className="row row-header">
-              <div className="col-12 col-sm-6">
-                <h1>Web Shop</h1>
-                <p>
-                  Best online shopping site for Åbo Akademi University students 
-                </p>
-              </div>
+          </NavbarBrand>
+          <Collapse isOpen={isNavOpen} navbar>
+            <Nav navbar>
+              <NavItem>
+                <NavLink className="nav-link" to="/shop">
+                  <span className="fa fa-home fa-lg"></span> Shop
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink className="nav-link" to="/myitems">
+                  <span className="fa fa-info fa-lg"></span> My Items
+                </NavLink>
+              </NavItem>
+            </Nav>
+            <Nav className="ms-auto" navbar>
+              <NavItem>
+                <NavLink className="nav-link" to="/signUp">
+                  <span className="fa fa-list fa-lg"></span> Sign Up
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink className="nav-link" to="/editAccount">
+                  <span className="fa fa-address-card fa-lg"></span> Edit Account
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <Button outline onClick={toggleModal}>
+                  <span className="fa fa-sign-in fa-lg"></span> Login
+                </Button>
+              </NavItem>
+              <NavItem>
+                {!showModal && (
+                  <button className="d-flex align-items-center" onClick={toggle}>
+                    Cart ({cartItems.length})
+                  </button>
+                )}
+              </NavItem>
+            </Nav>
+          </Collapse>
+        </div>
+      </Navbar>
+      <div className="jumbotron">
+        <div className="container">
+          <div className="row row-header">
+            <div className="col-12 col-sm-6">
+              <h1>Web Shop</h1>
+              <p>Best online shopping site for Åbo Akademi University students</p>
             </div>
           </div>
         </div>
-
-        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
-          <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
-          <ModalBody>
-            <Form onSubmit={this.handleLogin}>
-              <FormGroup>
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  type="text"
-                  id="username"
-                  name="username"
-                  innerRef={(input) => (this.username = input)}
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  type="password"
-                  id="password"
-                  name="password"
-                  innerRef={(input) => (this.password = input)}
-                />
-              </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Input
-                    type="checkbox"
-                    name="remember"
-                    innerRef={(input) => (this.remember = input)}
-                  />
-                  Remember me
-                </Label>
-              </FormGroup>
-              <Button type="submit" value="submit" color="primary">
-                Login
-              </Button>
-            </Form>
-          </ModalBody>
-        </Modal>
       </div>
-    );
-  }
-}
+
+      <Modal isOpen={isModalOpen} toggle={toggleModal}>
+        <ModalHeader toggle={toggleModal}>Login</ModalHeader>
+        <ModalBody>
+          <Form onSubmit={handleLogin}>
+            <FormGroup>
+              <Label htmlFor="username">Username</Label>
+              <Input type="text" id="username" name="username" />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="password">Password</Label>
+              <Input type="password" id="password" name="password" />
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input type="checkbox" name="remember" />
+                Remember me
+              </Label>
+            </FormGroup>
+            <Button type="submit" value="submit" color="primary">
+              Login
+            </Button>
+          </Form>
+        </ModalBody>
+      </Modal>
+
+      <Cart showModal={showModal} toggle={toggle} />
+    </div>
+  );
+};
 
 export default Header;

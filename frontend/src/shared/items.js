@@ -40,7 +40,7 @@ export const ITEMS = [
     createdBy: 122
   },
   {
-    id: 0,
+    id: 4,
     title: "Uthappizza",
     image: "/assets/images/uthappizza.png",
     price: "4.99",
@@ -50,7 +50,7 @@ export const ITEMS = [
     createdBy: 123
   },
   {
-    id: 1,
+    id: 5,
     title: "Zucchipakoda",
     image: "/assets/images/zucchipakoda.png",
     price: "1.99",
@@ -60,7 +60,7 @@ export const ITEMS = [
     createdBy: 122
   },
   {
-    id: 2,
+    id: 6,
     title: "Zucchipakoda",
     image: "/assets/images/vadonut.png",
     price: "1.99",
@@ -70,7 +70,7 @@ export const ITEMS = [
     createdBy: 122
   },
   {
-    id: 3,
+    id: 7,
     title: "Zucchipakoda",
     image: "/assets/images/elaicheesecake.png",
     price: "1.99",

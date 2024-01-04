@@ -36,3 +36,18 @@ address {
 .App {
   background-color: #e6f7ff
 }
+
+.addToCartButton {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addToCartButton:hover {
+  background-color: #0056b3;
+}
