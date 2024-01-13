@@ -1,5 +1,5 @@
 """
-URL configuration for user project.
+URL configuration for item project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -16,13 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from user import views
+from item import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/', views.user_list),
-    path('/<int:id>', views.user_detail)
+    path('/', views.item_list),
+    path('/<int:id>', views.item_detail)
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)

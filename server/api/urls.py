@@ -1,5 +1,5 @@
 """
-URL configuration for user project.
+URL configuration for api project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -15,14 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from user import views
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/', views.user_list),
-    path('/<int:id>', views.user_detail)
+    path('api/item/', include('item.urls')),
+    path('api/user/', include('user.urls'))
 ]
-
-urlpatterns = format_suffix_patterns(urlpatterns)
