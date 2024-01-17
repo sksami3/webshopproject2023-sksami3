@@ -67,7 +67,7 @@ class LoginView(APIView):
             'username': username
         }
 
-        token = jwt.encode(payload, 'secret', algorithm='HS256')#.decode('utf-8')
+        token = jwt.encode(payload, 'dotnetisthefuture', algorithm='HS256')#.decode('utf-8')
 
         response = Response()
 

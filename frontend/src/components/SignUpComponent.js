@@ -1,11 +1,11 @@
-// SignUp.js
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { USERSSERVICE } from '../constants';
 
 const SignUp = () => {
   const navigator = useNavigate();
   const { userId } = useParams();
-  
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -20,17 +20,31 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (userId) {
-      // Handle edit logic using the user ID
-      console.log('Editing user with ID:', userId);
-    } else {
-      // Handle sign up logic
-      console.log('Signing up:', formData);
+    const apiUrl = USERSSERVICE + '/register';
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Server response:', responseData);
+
+        // Redirect to another page after sign up or edit
+        navigator('/');
+      } else {
+        console.error('Error:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error:', error.message);
     }
-    // Redirect to another page after sign up or edit
-    navigator('/');
   };
 
   return (
