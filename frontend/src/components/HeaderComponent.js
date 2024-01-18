@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -18,12 +18,21 @@ import {
 import { NavLink } from "react-router-dom";
 import { CartContext } from "../context/cart.js";
 import Cart from "./Cart.js";
+import AuthService from "../services/AuthService.js";
 
 const Header = () => {
   const { cartItems } = useContext(CartContext);
   const [isNavOpen, setNavOpen] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [showModal, setshowModal] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const loggedInUser = AuthService.getUserFromToken();
+    if (loggedInUser) {
+      setUser(loggedInUser);
+    }
+  }, []);
 
   const toggleNav = () => {
     setNavOpen(!isNavOpen);
@@ -33,17 +42,34 @@ const Header = () => {
     setModalOpen(!isModalOpen);
   };
 
-  const handleLogin = (event) => {
-    toggleModal();
-    alert(
-      "Username: " +
-        event.target.username.value +
-        " Password: " +
-        event.target.password.value +
-        " Remember: " +
-        event.target.remember.checked
-    );
+  const handleLogin = async (event) => {
     event.preventDefault();
+
+    try {
+      const { username, password } = event.target;
+
+      const loginResult = await AuthService.login(username.value, password.value);
+
+      if (loginResult.success) {
+        const loggedInUser = AuthService.getUserFromToken();
+        if (loggedInUser) {
+          setUser(loggedInUser);
+        }
+
+        toggleModal();
+      } else {
+        console.error("Login Error:", loginResult.error);
+        alert("Login failed. Please check your credentials.");
+      }
+    } catch (error) {
+      console.error("Unexpected Error:", error);
+      alert("An unexpected error occurred during login.");
+    }
+  };
+
+  const handleLogout = () => {
+    AuthService.removeToken();
+    setUser(null);
   };
 
   const toggle = () => {
@@ -52,46 +78,66 @@ const Header = () => {
 
   return (
     <div>
+      {/* Navigation Bar */}
       <Navbar dark expand="md">
         <div className="container">
           <NavbarToggler onClick={toggleNav} />
           <NavbarBrand className="mr-auto" href="/">
-            {/* <img
-                src="assets/images/logo.png"
-                height="30"
-                width="41"
-                alt="Ristorante Con Fusion"
-              /> */}
+            {/* Your logo or brand */}
           </NavbarBrand>
           <Collapse isOpen={isNavOpen} navbar>
             <Nav navbar>
+              {/* Shop Menu */}
               <NavItem>
                 <NavLink className="nav-link" to="/shop">
                   <span className="fa fa-home fa-lg"></span> Shop
                 </NavLink>
               </NavItem>
+              {/* My Items Menu */}
               <NavItem>
                 <NavLink className="nav-link" to="/myitems">
                   <span className="fa fa-info fa-lg"></span> My Items
                 </NavLink>
               </NavItem>
+              {/* Add more NavItem components for other navigation links */}
             </Nav>
             <Nav className="ms-auto" navbar>
-              <NavItem>
-                <NavLink className="nav-link" to="/signUp">
-                  <span className="fa fa-list fa-lg"></span> Sign Up
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink className="nav-link" to="/editAccount">
-                  <span className="fa fa-address-card fa-lg"></span> Edit Account
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <Button outline onClick={toggleModal}>
-                  <span className="fa fa-sign-in fa-lg"></span> Login
-                </Button>
-              </NavItem>
+              {user ? (
+                <>
+                  {/* User Greeting */}
+                  <NavItem>
+                    <span className="nav-link">Welcome, {user.username}</span>
+                  </NavItem>
+                  {/* Edit Account Menu (Visible when logged in) */}
+                  <NavItem>
+                    <NavLink className="nav-link" to="/editAccount">
+                      <span className="fa fa-address-card fa-lg"></span> Edit Account
+                    </NavLink>
+                  </NavItem>
+                  {/* Logout Button */}
+                  <NavItem>
+                    <Button outline onClick={handleLogout}>
+                      Logout
+                    </Button>
+                  </NavItem>
+                </>
+              ) : (
+                <>
+                  {/* Sign Up Menu */}
+                  <NavItem>
+                    <NavLink className="nav-link" to="/signUp">
+                      <span className="fa fa-list fa-lg"></span> Sign Up
+                    </NavLink>
+                  </NavItem>
+                  {/* Login Button */}
+                  <NavItem>
+                    <Button outline onClick={toggleModal}>
+                      <span className="fa fa-sign-in fa-lg"></span> Login
+                    </Button>
+                  </NavItem>
+                </>
+              )}
+              {/* Cart Button */}
               <NavItem>
                 {!showModal && (
                   <button className="d-flex align-items-center" onClick={toggle}>
@@ -103,6 +149,8 @@ const Header = () => {
           </Collapse>
         </div>
       </Navbar>
+
+      {/* Jumbotron */}
       <div className="jumbotron">
         <div className="container">
           <div className="row row-header">
@@ -114,6 +162,7 @@ const Header = () => {
         </div>
       </div>
 
+      {/* Login Modal */}
       <Modal isOpen={isModalOpen} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Login</ModalHeader>
         <ModalBody>
@@ -139,6 +188,7 @@ const Header = () => {
         </ModalBody>
       </Modal>
 
+      {/* Cart Component */}
       <Cart showModal={showModal} toggle={toggle} />
     </div>
   );
