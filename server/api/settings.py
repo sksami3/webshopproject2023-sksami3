@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -76,7 +77,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'api.wsgi.application'
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  
+    "http://*",
+    "https://*",
 ]
 
 REST_FRAMEWORK = {
@@ -138,6 +140,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.AppUser'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True

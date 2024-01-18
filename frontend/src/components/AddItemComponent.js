@@ -1,23 +1,26 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import AuthService from "../services/AuthService";
+import { ITEMSERVICE } from "../constants";
 
 const AddItem = () => {
   const initialFormData = {
     title: "",
-    image: "",
+    image: null,
     price: 0,
     quantity: 1,
     description: "",
+    created_by: AuthService.getUserFromToken()?.userId || "",
   };
 
   const [formData, setFormData] = useState(initialFormData);
   const [previewImage, setPreviewImage] = useState(null);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type === "file" ? e.target.files[0] : value,
     });
   };
 
@@ -27,7 +30,7 @@ const AddItem = () => {
     if (file) {
       setFormData({
         ...formData,
-        image: file.name, // You can use a better approach for handling images, such as uploading to a server and storing the URL.
+        image: file,
       });
 
       const reader = new FileReader();
@@ -39,7 +42,7 @@ const AddItem = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validate mandatory fields
@@ -53,12 +56,34 @@ const AddItem = () => {
       return;
     }
 
-    // Perform your submission logic here
-    console.log("Form Data Submitted:", formData);
+    try {
+      // Send the form data to the API using FormData
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        formDataToSend.append(key, value);
+      });
 
-    // Reset the form after submission if needed
-    setFormData(initialFormData);
-    setPreviewImage(null);
+      const response = await fetch(ITEMSERVICE + "/", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${AuthService.getToken()}`,
+        },
+        body: formDataToSend,
+      });
+
+      if (response.ok) {
+        console.log("Item added successfully");
+        // Reset the form after successful submission if needed
+        setFormData(initialFormData);
+        setPreviewImage(null);
+      } else {
+        console.error("Failed to add item:", response.statusText);
+        alert("Failed to add item. Please try again.");
+      }
+    } catch (error) {
+      console.error("Unexpected Error:", error);
+      alert("An unexpected error occurred. Please try again.");
+    }
   };
 
   return (
@@ -131,6 +156,13 @@ const AddItem = () => {
             required
           />
         </div>
+
+        <input
+          type="hidden"
+          name="created_by"
+          value={formData.created_by}
+          onChange={handleChange}
+        />
 
         <button type="submit" className="btn btn-primary">
           Submit
