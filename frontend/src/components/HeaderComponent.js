@@ -110,7 +110,7 @@ const Header = () => {
                   </NavItem>
                   {/* Edit Account Menu (Visible when logged in) */}
                   <NavItem>
-                    <NavLink className="nav-link" to="/editAccount">
+                    <NavLink className="nav-link" to="/editUser">
                       <span className="fa fa-address-card fa-lg"></span> Edit Account
                     </NavLink>
                   </NavItem>

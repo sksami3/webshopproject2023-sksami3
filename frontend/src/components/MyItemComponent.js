@@ -9,6 +9,7 @@ import {
   BreadcrumbItem,
 } from "reactstrap";
 import { useNavigate } from 'react-router-dom';
+import { STATICSERVICE } from "../constants.js";
 
 function RenderMyItems({ item, onClk }) {
   const navigation = useNavigate();
@@ -20,7 +21,16 @@ function RenderMyItems({ item, onClk }) {
 
   return (
     <Card>
-      <CardImg width="100%" object src={item.image} alt={item.name} />
+      <CardImg
+            style={{
+              height: "200px", 
+              width: "100%", 
+              objectFit: "fill", 
+            }}
+            object
+            src={STATICSERVICE + item.image}
+            alt={item.name}
+          />
       <CardTitle>
         <strong />
         Title: {item.title}
@@ -32,7 +42,6 @@ function RenderMyItems({ item, onClk }) {
   );
 }
 const MyItems = (props) => {
-  console.log(props.items);
   const myItems = props.items.map((item) => {
     return (
       <div className="col-4 col-md-3 m-0">

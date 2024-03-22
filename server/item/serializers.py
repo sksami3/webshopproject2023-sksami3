@@ -5,7 +5,7 @@ from .models import Item
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['id', 'title', 'image', 'price', 'quantity', 'description', 'created_by', 'modified_by', 'created_at', 'modified_at']
+        fields = ['id', 'title', 'image', 'price', 'quantity', 'description', 'created_by', 'modified_by', 'created_at', 'modified_at', 'created_by_id']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "../services/AuthService";
 import { ITEMSERVICE } from "../constants";
 
-const AddItem = () => {
+const AddItem = ({ addItemAndUpdateState }) => {
   const initialFormData = {
     title: "",
     image: null,
@@ -76,6 +76,9 @@ const AddItem = () => {
         // Reset the form after successful submission if needed
         setFormData(initialFormData);
         setPreviewImage(null);
+        let newObject = await response.json();
+        console.log(newObject);
+        addItemAndUpdateState(newObject)
       } else {
         console.error("Failed to add item:", response.statusText);
         alert("Failed to add item. Please try again.");

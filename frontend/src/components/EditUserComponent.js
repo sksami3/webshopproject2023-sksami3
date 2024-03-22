@@ -1,11 +1,9 @@
 // EditUser.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const EditUser = () => {
+const EditUser = ({user}) => {
   const navigator = useNavigate();
-  const { userId } = useParams();
-  
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -14,14 +12,10 @@ const EditUser = () => {
 
   useEffect(() => {
     // Fetch user data based on the user ID when component mounts
-    if (userId) {
-      // Assuming you have a function to fetch user data by ID
-      // Replace this with your actual data fetching logic
-      fetchUserData(userId)
-        .then((user) => setFormData(user))
-        .catch((error) => console.error('Error fetching user data:', error));
+    if (user) {
+      setFormData(user);
     }
-  }, [userId]);
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +28,7 @@ const EditUser = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle edit logic using the user ID
-    console.log('Editing user with ID:', userId, 'Updated Data:', formData);
+    console.log('Updated Data:', formData);
     // Redirect to another page after editing
     navigator('/');
   };
@@ -84,17 +78,6 @@ const EditUser = () => {
       </form>
     </div>
   );
-};
-
-// Replace this with your actual data fetching logic
-const fetchUserData = (userId) => {
-  // Assuming you have a function to fetch user data by ID
-  // Replace this with your actual data fetching logic
-  return Promise.resolve({
-    username: 'SampleUser',
-    password: '********',
-    email: 'sampleuser@example.com',
-  });
 };
 
 export default EditUser;

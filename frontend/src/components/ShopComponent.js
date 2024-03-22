@@ -14,6 +14,7 @@ import { CartContext } from "../context/cart.js";
 import Cart from "./Cart.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { STATICSERVICE } from "../constants.js";
 
 function RenderShop({ item, cartItems }) {
   const { addToCart, removeFromCart } = useContext(CartContext);
@@ -58,7 +59,17 @@ function RenderShop({ item, cartItems }) {
       <ToastContainer />
       <Card>
         <Link to={`/item/${item.id}`}>
-          <CardImg width="100%" object src={item.image} alt={item.name} />
+          <CardImg
+            style={{
+              height: "200px", 
+              width: "100%", 
+              objectFit: "fill", 
+            }}
+            object
+            src={STATICSERVICE + item.image}
+            alt={item.name}
+          />
+
           <CardTitle>
             <strong />
             Title: {item.title}
@@ -76,7 +87,7 @@ function RenderShop({ item, cartItems }) {
             }}
           >
             Add to cart
-              <i className="fa fa-shopping-cart" aria-hidden="true"></i>{" "}
+            <i className="fa fa-shopping-cart" aria-hidden="true"></i>{" "}
           </button>
         ) : (
           <div className="d-flex align-items-center justify-content-between">
@@ -125,20 +136,10 @@ const Shop = (props) => {
   const shop = () => {
     return (
       <>
-        {/* {!showModal && (
-          <button className="d-flex align-items-center" onClick={toggle}>
-            Cart ({cartItems.length})
-          </button>
-        )} */}
-
         {props.items.map((item) => {
           return (
             <div className="col-4 col-md-3 m-0" key={item.id}>
-              <RenderShop
-                item={item}
-                key={item.id}
-                cartItems={cartItems}
-              />
+              <RenderShop item={item} key={item.id} cartItems={cartItems} />
               <br />
             </div>
           );
@@ -162,8 +163,6 @@ const Shop = (props) => {
         </div>
       </div>
       <div className="row">{shop()}</div>
-
-      {/* <Cart showModal={showModal} toggle={toggle} /> */}
     </div>
   );
 };
