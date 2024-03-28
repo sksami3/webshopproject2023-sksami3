@@ -111,7 +111,7 @@ const AddItem = ({ addItemAndUpdateState }) => {
             className="form-control"
             accept="image/*"
             onChange={handleImageChange}
-            required
+            // required
           />
           {previewImage && (
             <img

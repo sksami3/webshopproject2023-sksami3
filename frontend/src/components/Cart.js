@@ -67,7 +67,7 @@ const Cart = ({ showModal, toggle }) => {
             >
               <div className="d-flex gap-4">
                 <img
-                  src={item.image}
+                  src={item.image || "./No_Image_Available.jpg"}
                   alt={item.title}
                   className="rounded-md w-24 h-24"
                 />

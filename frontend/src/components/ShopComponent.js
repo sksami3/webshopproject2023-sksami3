@@ -61,9 +61,9 @@ function RenderShop({ item, cartItems }) {
         <Link to={`/item/${item.id}`}>
           <CardImg
             style={{
-              height: "200px", 
-              width: "100%", 
-              objectFit: "fill", 
+              height: "200px",
+              width: "100%",
+              objectFit: "fill",
             }}
             object
             src={STATICSERVICE + item.image}
@@ -127,16 +127,25 @@ function RenderShop({ item, cartItems }) {
 const Shop = (props) => {
   // const shop = (props) => {
   const [showModal, setshowModal] = useState(false);
+  const [filterTerm, setFilterTerm] = useState('');
   const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
 
   const toggle = () => {
     setshowModal(!showModal);
   };
 
+  const handleFilterChange = (e) => {
+    setFilterTerm(e.target.value.toLowerCase());
+  };
+
+  const filteredItems = props.items.filter((item) =>
+    item.title.toLowerCase().includes(filterTerm)
+  );
+
   const shop = () => {
     return (
       <>
-        {props.items.map((item) => {
+        {filteredItems.map((item) => {
           return (
             <div className="col-4 col-md-3 m-0" key={item.id}>
               <RenderShop item={item} key={item.id} cartItems={cartItems} />
@@ -162,7 +171,18 @@ const Shop = (props) => {
           <hr />
         </div>
       </div>
-      <div className="row">{shop()}</div>
+      <div className="row col-md-4" style={{ padding: 'inherit' }}>
+        <input
+          type="text"
+          placeholder="Filter by title..."
+          value={filterTerm}
+          onChange={handleFilterChange}
+        />
+      </div>
+      <br />
+      <div className="row">
+        {shop()}
+      </div>
     </div>
   );
 };
