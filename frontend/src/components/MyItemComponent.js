@@ -42,6 +42,7 @@ function RenderMyItems({ item, onClk }) {
   );
 }
 const MyItems = (props) => {
+  console.log(props);
   const myItems = props.items.map((item) => {
     return (
       <div className="col-4 col-md-3 m-0">

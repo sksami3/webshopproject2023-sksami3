@@ -66,7 +66,7 @@ function RenderShop({ item, cartItems }) {
               objectFit: "fill",
             }}
             object
-            src={STATICSERVICE + item.image}
+            src={item.image ? STATICSERVICE + item.image : "./No_Image_Available.jpg"}
             alt={item.name}
           />
 

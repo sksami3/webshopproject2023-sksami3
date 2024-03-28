@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { STATICSERVICE } from "../constants.js";
 import {
   Card,
   CardBody,
@@ -11,6 +12,7 @@ import {
 } from "reactstrap";
 
 function RenderItem({ item }) {
+  console.log(item);
   const [quantity, setQuantity] = useState(0);
 
   const handleQuantityChange = (event) => {
@@ -37,7 +39,16 @@ function RenderItem({ item }) {
           </Breadcrumb>
           <div className="col-12 col-md-5 m-1">
             <Card>
-              <CardImg width="100%" src={item.image} alt={item.title} />
+              <CardImg
+                style={{
+                  height: "200px",
+                  width: "100%",
+                  objectFit: "fill",
+                }}
+                object
+                src={item.image ? STATICSERVICE + item.image : "./No_Image_Available.jpg"}
+                alt={item.name}
+              />
               <CardBody>
                 <CardTitle>
                   <b>{item.title}</b>

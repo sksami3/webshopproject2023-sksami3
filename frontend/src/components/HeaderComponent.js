@@ -57,6 +57,7 @@ const Header = () => {
         }
 
         toggleModal();
+        window.location.reload();
       } else {
         console.error("Login Error:", loginResult.error);
         alert("Login failed. Please check your credentials.");
