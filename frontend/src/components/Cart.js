@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Modal } from "reactstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { STATICSERVICE } from "../constants";
 
 import PropTypes from "prop-types";
 import { useContext } from "react";
@@ -67,9 +68,13 @@ const Cart = ({ showModal, toggle }) => {
             >
               <div className="d-flex gap-4">
                 <img
-                  src={item.image || "./No_Image_Available.jpg"}
+                  src={STATICSERVICE + item.image || "./No_Image_Available.jpg"}
                   alt={item.title}
                   className="rounded-md w-24 h-24"
+                  style={{
+                    width: "20%",
+                    objectFit: "fill",
+                  }}
                 />
                 <div className="d-flex flex-column align-items-start">
                   <h1 className="text-lg font-bold mb-2">{item.title}</h1>
