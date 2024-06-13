@@ -13,14 +13,14 @@ class userItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = userItem
-        fields = ['user', 'item', 'quantity']
+        fields = ['user', 'item', 'ordered_quantity']
 
     def create(self, validated_data):
         user = validated_data.get('user')
         item = validated_data.get('item')
-        quantity = validated_data.get('quantity')
+        ordered_quantity = validated_data.get('ordered_quantity')
 
-        user_item = userItem.objects.create(user=user, item=item, quantity=quantity)
+        user_item = userItem.objects.create(user=user, item=item, ordered_quantity=ordered_quantity)
         return user_item
 
     def to_representation(self, instance):
