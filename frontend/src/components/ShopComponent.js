@@ -100,7 +100,7 @@ function RenderShop({ item, cartItems }) {
               +
             </button>
             <p className="text-gray-600">
-              {cartItems.find((cartItem) => cartItem.id === item.id).quantity}
+              {cartItems.find((cartItem) => cartItem.id === item.id).ordered_quantity}
             </p>
             <button
               className="d-flex align-items-center addToCartButton"
@@ -108,7 +108,7 @@ function RenderShop({ item, cartItems }) {
                 const cartItem = cartItems.find(
                   (cartItem) => cartItem.id === item.id
                 );
-                if (cartItem.quantity === 1) {
+                if (cartItem.ordered_quantity === 1) {
                   handleRemoveFromCart(item);
                 } else {
                   removeFromCart(item);

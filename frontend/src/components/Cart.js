@@ -90,14 +90,14 @@ const Cart = ({ showModal, toggle }) => {
                 >
                   +
                 </Button>
-                <p>{item.quantity}</p>
+                <p>{item.ordered_quantity}</p>
                 <Button
                   className="px-4 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
                   onClick={() => {
                     const cartItem = cartItems.find(
                       (product) => product.id === item.id
                     );
-                    if (cartItem.quantity === 1) {
+                    if (cartItem.ordered_quantity === 1) {
                       handleRemoveFromCart(item);
                     } else {
                       removeFromCart(item);
