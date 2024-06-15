@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Modal } from "reactstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { STATICSERVICE } from "../constants";
-
 import PropTypes from "prop-types";
-import { useContext } from "react";
 import { CartContext } from "../context/cart.js";
+// import "../components/CartStyles.css"; 
 
 const Cart = ({ showModal, toggle }) => {
   const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } =
@@ -21,14 +20,10 @@ const Cart = ({ showModal, toggle }) => {
       pauseOnHover: true,
       draggable: true,
       theme: "colored",
-      style: {
-        backgroundColor: "#000",
-        color: "#fff",
-      },
     });
 
   const notifyCartCleared = () =>
-    toast.error(`Cart cleared!`, {
+    toast.error("Cart cleared!", {
       position: "top-center",
       autoClose: 2000,
       hideProgressBar: true,
@@ -36,10 +31,6 @@ const Cart = ({ showModal, toggle }) => {
       pauseOnHover: true,
       draggable: true,
       theme: "colored",
-      style: {
-        backgroundColor: "#000",
-        color: "#fff",
-      },
     });
 
   const handleRemoveFromCart = (product) => {
@@ -49,24 +40,18 @@ const Cart = ({ showModal, toggle }) => {
 
   return (
     showModal && (
-      <Modal isOpen={showModal} toggle={toggle} size="lg" style={{maxWidth: '700px', width: '100%'}}>
+      <Modal isOpen={showModal} toggle={toggle} className="cart-modal">
         <ToastContainer />
-        <h1 className="text-2xl font-bold">Cart</h1>
-        <div className="position-absolute right-16 top-10">
-          <Button
-            className="px-4 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-            onClick={toggle}
-          >
-            Close
+        <div className="modal-header">
+          <h2 className="modal-title">Your Cart</h2>
+          <Button className="modal-close-button" onClick={toggle} style={{ color: "red" }}>
+            <span className="fa fa-times"></span>
           </Button>
         </div>
-        <div className="d-flex flex-column gap-4">
-          {cartItems.map((item) => (
-            <div
-              className="d-flex justify-content-between align-items-center"
-              key={item.id}
-            >
-              <div className="d-flex gap-4">
+        <div className="modal-body">
+          <div className="cart-items-container">
+            {cartItems.map((item) => (
+              <div className="cart-item" key={item.id}>
                 <img
                   src={STATICSERVICE + item.image || "./No_Image_Available.jpg"}
                   alt={item.title}
@@ -76,64 +61,59 @@ const Cart = ({ showModal, toggle }) => {
                     objectFit: "fill",
                   }}
                 />
-                <div className="d-flex flex-column align-items-start">
-                  <h1 className="text-lg font-bold mb-2">{item.title}</h1>
-                  <p className="text-gray-600">Unit Price: ${item.price}</p>
+                <div className="cart-item-info">
+                  <h3 className="cart-item-title">{item.title}</h3>
+                  <p className="cart-item-price">Unit Price: ${item.price}</p>
+                </div>
+                <div className="cart-item-actions">
+                  <Button
+                    className="cart-item-action-button"
+                    onClick={() => addToCart(item)}
+                  >
+                    +
+                  </Button>
+                  <span className="cart-item-quantity">{item.ordered_quantity}</span>
+                  <Button
+                    className="cart-item-action-button"
+                    onClick={() => {
+                      if (item.quantity === 1) {
+                        handleRemoveFromCart(item);
+                      } else {
+                        removeFromCart(item);
+                      }
+                    }}
+                  >
+                    -
+                  </Button>
                 </div>
               </div>
-              <div className="d-flex gap-4">
-                <Button
-                  className="px-4 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-                  onClick={() => {
-                    addToCart(item);
-                  }}
-                >
-                  +
-                </Button>
-                <p>{item.ordered_quantity}</p>
-                <Button
-                  className="px-4 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-                  onClick={() => {
-                    const cartItem = cartItems.find(
-                      (product) => product.id === item.id
-                    );
-                    if (cartItem.ordered_quantity === 1) {
-                      handleRemoveFromCart(item);
-                    } else {
-                      removeFromCart(item);
-                    }
-                  }}
-                >
-                  -
-                </Button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
         {cartItems.length > 0 ? (
-          <div className="d-flex flex-column justify-content-between align-items-center">
-            <h1 className="text-lg font-bold">Total: ${getCartTotal()}</h1>
+          <div className="cart-total-section">
+            <h2 className="cart-total-title">Total: ${getCartTotal()}</h2>
             <Button
-              className="px-4 py-2 bg-gray-800 text-white text-xs font-bold uppercase rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+              className="cart-clear-button"
               onClick={() => {
                 clearCart();
                 notifyCartCleared();
               }}
             >
-              Clear cart
+              Clear Cart
             </Button>
           </div>
         ) : (
-          <h1 className="text-lg font-bold">Your cart is empty</h1>
+          <h3 className="cart-empty-message">Your cart is empty</h3>
         )}
       </Modal>
     )
-  );
-};
+  )
+};  
 
 Cart.propTypes = {
-  showModal: PropTypes.bool,
-  toggle: PropTypes.func,
+  showModal: PropTypes.bool.isRequired,
+  toggle: PropTypes.func.isRequired,
 };
 
 export default Cart;

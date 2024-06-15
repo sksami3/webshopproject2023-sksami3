@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { createContext, useState, useEffect } from "react";
 import { USERITEMSERVICE } from "../constants.js";
 import AuthService from "../services/AuthService.js";
+import "../../src/cartStyles.css"; 
 
 export const CartContext = createContext();
 export const CartProvider = ({ children }) => {

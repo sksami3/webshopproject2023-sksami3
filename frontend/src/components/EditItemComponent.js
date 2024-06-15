@@ -4,7 +4,7 @@ import { STATICSERVICE } from "../constants";
 import AuthService from "../services/AuthService";
 import { ITEMSERVICE } from "../constants";
 
-const EditItem = ({ item, onEdit }) => {
+const EditItem = ({ item, onUpdate }) => {
   const imagePath = STATICSERVICE + item.image;
   const [formData, setFormData] = useState(item);
   const [previewImage, setPreviewImage] = useState(imagePath);
@@ -61,6 +61,10 @@ const EditItem = ({ item, onEdit }) => {
         formDataToSend.append(key, value);
       });
 
+      //deleting not editable fields
+      formDataToSend.delete("image");
+      //formDataToSend.delete("title");
+      //formDataToSend.delete("description");
       console.log(formDataToSend);
       const response = await fetch(`${ITEMSERVICE}/${item.id}`, {
         method: "PUT",
@@ -73,7 +77,9 @@ const EditItem = ({ item, onEdit }) => {
       if (response.ok) {
         console.log("Item updated successfully");
         setPreviewImage(null);
-        onEdit(formData); // Notify parent component about the edit
+        const updatedItem = await response.json();
+        onUpdate(updatedItem);
+        //onEdit(formData); // Notify parent component about the edit
       } else {
         console.error("Failed to update item:", response.statusText);
         alert("Failed to update item. Please try again.");
@@ -96,6 +102,9 @@ const EditItem = ({ item, onEdit }) => {
             value={formData.title}
             onChange={handleChange}
             required
+            readonly
+            disabled  
+            tabIndex={-1}
           />
         </div>
 
@@ -121,6 +130,9 @@ const EditItem = ({ item, onEdit }) => {
             className="form-control"
             accept="image/*"
             onChange={handleImageChange}
+            readonly
+            disabled  
+            tabIndex={-1} 
           />
           {previewImage && (
             <img
@@ -164,6 +176,9 @@ const EditItem = ({ item, onEdit }) => {
             value={formData.description}
             onChange={handleChange}
             required
+            readonly 
+            disabled 
+            tabIndex={-1}
           />
         </div>
 
