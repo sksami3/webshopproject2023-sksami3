@@ -72,7 +72,7 @@ const Cart = ({ showModal, toggle }) => {
                   >
                     +
                   </Button>
-                  <span className="cart-item-quantity">{item.quantity}</span>
+                  <span className="cart-item-quantity">{item.ordered_quantity}</span>
                   <Button
                     className="cart-item-action-button"
                     onClick={() => {

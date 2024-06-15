@@ -28,7 +28,7 @@ function RenderMyItems({ item, onClk }) {
               objectFit: "fill", 
             }}
             object
-            src={STATICSERVICE + item.image}
+            src={item.image ? STATICSERVICE + item.image : process.env.PUBLIC_URL + "/No_Image_Available.jpg"}
             alt={item.name}
           />
       <CardTitle>

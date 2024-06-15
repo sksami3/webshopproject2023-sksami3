@@ -1,0 +1,170 @@
+
+/* General Layout and Typography */
+.cart-modal {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #f4f4f4;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 24px;
+}
+
+.modal-close-button {
+  border: none;
+  background: none;
+  color: red;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Cart Items Container */
+.cart-items-container {
+  padding: 16px;
+  overflow-y: auto; /* Adds scroll to cart items if overflow */
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.cart-item img {
+  width: 96px; /* Fixed size for images */
+  height: auto;
+  margin-right: 16px;
+  border-radius: 4px;
+}
+
+.cart-item-info {
+  flex-grow: 1;
+}
+
+.cart-item-title {
+  font-size: 18px;
+  margin: 0 0 8px 0;
+}
+
+.cart-item-price {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.cart-item-actions {
+  display: flex;
+  align-items: center;
+}
+
+.cart-item-action-button {
+  padding: 8px 12px;
+  margin: 0 4px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-item-action-button:hover,
+.cart-item-action-button:focus {
+  background-color: #0056b3;
+}
+
+.cart-item-quantity {
+  min-width: 32px;
+  text-align: center;
+}
+
+/* Cart Total and Actions */
+.cart-total-section,
+.cart-empty-message {
+  padding: 16px;
+  text-align: center;
+  font-size: 20px;
+}
+
+.cart-clear-button {
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-clear-button:hover,
+.cart-clear-button:focus {
+  background-color: #c82333;
+}
+
+/* Utility Classes */
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.bg-gray-800 {
+  background-color: #343a40;
+}
+
+.text-white {
+  color: white;
+}
+
+.text-xs {
+  font-size: 12px;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.hover\:bg-gray-700:hover {
+  background-color: #6c757d;
+}
+
+.focus\:outline-none:focus {
+  outline: none;
+}
+
+.focus\:bg-gray-700:focus {
+  background-color: #6c757d;
+}
