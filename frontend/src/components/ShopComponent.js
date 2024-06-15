@@ -15,9 +15,25 @@ import Cart from "./Cart.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { STATICSERVICE } from "../constants.js";
+import AuthService from "../services/AuthService.js";
 
 function RenderShop({ item, cartItems }) {
   const { addToCart, removeFromCart } = useContext(CartContext);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+
+  useEffect(() => {
+    const user = AuthService.getUserFromToken();
+    setLoggedInUser(user);
+  }, []);
+
+  const handleAddToCartClick = (item) => {
+    if (!loggedInUser) {
+      alert("Please login first to add to cart");
+      return;
+    }
+    addToCart(item);
+    notifyAddedToCart(item);
+  };
 
   const notifyAddedToCart = (item) =>
     toast.success(`${item.title} added to cart!`, {
@@ -82,11 +98,10 @@ function RenderShop({ item, cartItems }) {
           <button
             className="d-flex align-items-center justify-content-center addToCartButton"
             onClick={() => {
-              addToCart(item);
-              notifyAddedToCart(item);
+              handleAddToCartClick(item);
             }}
           >
-            Add to cart
+            Add to Cart
             <i className="fa fa-shopping-cart" aria-hidden="true"></i>{" "}
           </button>
         ) : (

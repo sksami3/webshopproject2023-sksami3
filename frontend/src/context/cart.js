@@ -12,7 +12,7 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     async function fetchUserAndCartItems() {
       const user = AuthService.getUserFromToken();
-      setloggedInUser(user); // Note: This does not update immediately
+      setloggedInUser(user); 
 
       // We need to use the user directly since state updates are asynchronous
       if (user && user.userId) {

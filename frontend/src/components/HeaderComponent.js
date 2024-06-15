@@ -19,6 +19,7 @@ import { NavLink } from "react-router-dom";
 import { CartContext } from "../context/cart.js";
 import Cart from "./Cart.js";
 import AuthService from "../services/AuthService.js";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { cartItems } = useContext(CartContext);
@@ -26,6 +27,7 @@ const Header = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [showModal, setshowModal] = useState(false);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loggedInUser = AuthService.getUserFromToken();
@@ -71,6 +73,7 @@ const Header = () => {
   const handleLogout = () => {
     AuthService.removeToken();
     setUser(null);
+    window.location.reload()
   };
 
   const toggle = () => {
