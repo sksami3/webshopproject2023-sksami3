@@ -75,6 +75,12 @@ const Main = () => {
     setItems((prevItems) => [...prevItems, newItem]);
   };
 
+  const updateItemInState = (updatedItem) => {
+    setItems((prevItems) =>
+      prevItems.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+    );
+  };
+
   const ItemWithId = () => {
     let { itemId } = useParams();
     return (
@@ -85,7 +91,7 @@ const Main = () => {
   const EditItemWithId = () => {
     let { itemId } = useParams();
     return (
-      <EditItem item={items.find((item) => item.id === parseInt(itemId, 10))} />
+      <EditItem item={items.find((item) => item.id === parseInt(itemId, 10))} onUpdate={updateItemInState} />
     );
   };
 

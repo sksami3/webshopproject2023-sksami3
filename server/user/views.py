@@ -1,13 +1,14 @@
 from django.http import JsonResponse
 from user.models import AppUser
 from .serializers import AppUserSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 from rest_framework.views import APIView
 from rest_framework.exceptions import AuthenticationFailed
 import jwt, datetime
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['GET'])
 def user_list(request, format=None):
@@ -37,6 +38,29 @@ def user_detail(request, id, format=None):
     elif request.method == 'DELETE':
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+@api_view(['PUT'])
+def change_password(request):
+    data = request.data
+    old_password = data.get('oldPassword')
+    new_password = data.get('newPassword')
+    user_id = data.get('userId')
+
+    # Attempt to retrieve the user by userId
+    try:
+        user = AppUser.objects.get(pk=user_id)
+    except AppUser.DoesNotExist:
+        return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Check if the old password is correct
+    if not user.check_password(old_password):
+        return Response({'error': 'Old password is incorrect.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # If the old password is correct, set the new password
+    user.set_password(new_password)
+    user.save()
+
+    return Response({'message': 'Password successfully changed.'}, status=status.HTTP_200_OK)
     
 
 class RegisterView(APIView):

@@ -63,6 +63,12 @@ const AddItem = ({ addItemAndUpdateState }) => {
         formDataToSend.append(key, value);
       });
 
+      if (formDataToSend.get("image") === "null") {
+        // If the value is the string "null", delete the image field
+        formDataToSend.delete("image");
+      }      
+
+      console.log(formDataToSend);
       const response = await fetch(ITEMSERVICE + "/", {
         method: "POST",
         headers: {
@@ -111,7 +117,7 @@ const AddItem = ({ addItemAndUpdateState }) => {
             className="form-control"
             accept="image/*"
             onChange={handleImageChange}
-            // required
+          // required
           />
           {previewImage && (
             <img

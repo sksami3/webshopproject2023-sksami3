@@ -25,7 +25,8 @@ urlpatterns = [
     path('<int:id>', views.user_detail),
     path('register', views.RegisterView.as_view()),
     path('login', views.LoginView.as_view()),
-    path('logout', views.LogoutView.as_view())
+    path('logout', views.LogoutView.as_view()),
+    path('change_password', views.change_password)
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
