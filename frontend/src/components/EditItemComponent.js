@@ -28,7 +28,7 @@ const EditItem = ({ item, onUpdate }) => {
     if (file) {
       setFormData({
         ...formData,
-        image: file,  // Use the file object directly
+        image: file, // Use the file object directly
       });
 
       const reader = new FileReader();
@@ -43,7 +43,6 @@ const EditItem = ({ item, onUpdate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate mandatory fields
     if (
       !formData.title ||
       !formData.price ||
@@ -54,39 +53,34 @@ const EditItem = ({ item, onUpdate }) => {
       return;
     }
 
-    try {
-      // Send the form data to the API using FormData
-      const formDataToSend = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
+    const formDataToSend = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      // Append all form data except the image
+      if (value !== null && key !== "image") {
         formDataToSend.append(key, value);
-      });
-
-      //deleting not editable fields
-      formDataToSend.delete("image");
-      //formDataToSend.delete("title");
-      //formDataToSend.delete("description");
-      console.log(formDataToSend);
-      const response = await fetch(`${ITEMSERVICE}/${item.id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${AuthService.getToken()}`,
-        },
-        body: formDataToSend,
-      });
-
-      if (response.ok) {
-        console.log("Item updated successfully");
-        setPreviewImage(null);
-        const updatedItem = await response.json();
-        onUpdate(updatedItem);
-        //onEdit(formData); // Notify parent component about the edit
-      } else {
-        console.error("Failed to update item:", response.statusText);
-        alert("Failed to update item. Please try again.");
       }
-    } catch (error) {
-      console.error("Unexpected Error:", error);
-      alert("An unexpected error occurred. Please try again.");
+    });
+
+    // Append image only if it's a file object (newly uploaded)
+    if (formData.image instanceof File) {
+      formDataToSend.append("image", formData.image);
+    }
+
+    const response = await fetch(`${ITEMSERVICE}/${item.id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${AuthService.getToken()}`,
+      },
+      body: formDataToSend,
+    });
+
+    if (response.ok) {
+      console.log("Item updated successfully");
+      const updatedItem = await response.json();
+      onUpdate(updatedItem);
+    } else {
+      console.error("Failed to update item:", response.statusText);
+      alert("Failed to update item. Please try again.");
     }
   };
 
@@ -103,7 +97,7 @@ const EditItem = ({ item, onUpdate }) => {
             onChange={handleChange}
             required
             readonly
-            disabled  
+            disabled
             tabIndex={-1}
           />
         </div>
@@ -131,8 +125,8 @@ const EditItem = ({ item, onUpdate }) => {
             accept="image/*"
             onChange={handleImageChange}
             readonly
-            disabled  
-            tabIndex={-1} 
+            disabled
+            tabIndex={-1}
           />
           {previewImage && (
             <img
@@ -176,8 +170,8 @@ const EditItem = ({ item, onUpdate }) => {
             value={formData.description}
             onChange={handleChange}
             required
-            readonly 
-            disabled 
+            readonly
+            disabled
             tabIndex={-1}
           />
         </div>

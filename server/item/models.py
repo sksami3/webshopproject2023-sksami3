@@ -1,8 +1,14 @@
 # item/models.py
 from django.db import models
 from django.db.models.fields.files import ImageField
+from django.dispatch import receiver
 from user.models import AppUser
 from BaseModel.BaseModel import BaseModel
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+import logging
+logger = logging.getLogger(__name__)
+from django.db import transaction
 
 class Item(BaseModel):
     title = models.CharField(max_length=255)
@@ -13,3 +19,4 @@ class Item(BaseModel):
 
     def __str__(self):
         return self.title
+    
