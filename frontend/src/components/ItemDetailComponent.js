@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { STATICSERVICE } from "../constants.js";
 import {
@@ -10,21 +10,10 @@ import {
   Breadcrumb,
   BreadcrumbItem,
 } from "reactstrap";
+import { CartContext } from "../context/cart.js";
+import Cart from "./Cart.js";
 
 function RenderItem({ item }) {
-  console.log(item);
-  const [quantity, setQuantity] = useState(0);
-
-  const handleQuantityChange = (event) => {
-    setQuantity(event.target.value);
-  };
-
-  const handleAddToCart = (item, quantity) => {
-    // Handle the logic for adding the product to the cart
-    console.log(item);
-    console.log(quantity);
-  };
-
   if (item == null || item === undefined) {
     return <div></div>;
   } else {
@@ -46,14 +35,22 @@ function RenderItem({ item }) {
                   objectFit: "fill",
                 }}
                 object
-                src={item.image ? STATICSERVICE + item.image : "./No_Image_Available.jpg"}
+                src={
+                  item.image
+                    ? STATICSERVICE + item.image
+                    : "./No_Image_Available.jpg"
+                }
                 alt={item.name}
               />
               <CardBody>
                 <CardTitle>
-                  <b>{item.title}</b>
+                  <div className="form-group">
+                    <p className="card-title">
+                      <b>Title:</b> {item.title} 
+                    </p>
+                  </div>
                 </CardTitle>
-                <CardText>{item.description}</CardText>
+                <CardText><b>Description:</b> {item.description}</CardText>
               </CardBody>
             </Card>
           </div>
@@ -62,31 +59,14 @@ function RenderItem({ item }) {
             <div className="card">
               <div className="card-body">
                 <p className="card-title">
-                  <b>Price: {item.price} €</b>{" "}
+                  <b>Price:</b> {item.price} €{" "}
                 </p>
 
                 <div className="form-group">
-                  <label htmlFor="quantity">Quantity:</label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    id="quantity"
-                    placeholder="Enter quantity"
-                    onChange={handleQuantityChange}
-                    value={quantity}
-                    min="1"
-                    max={item.quantity}
-                    defaultValue="1"
-                  />
+                  <p className="card-title">
+                    <b>Available Quantity:</b> {item.quantity} 
+                  </p>
                 </div>
-
-                <button
-                  type="button"
-                  className="btn btn-primary btn-block"
-                  onClick={() => handleAddToCart(item, quantity)}
-                >
-                  Add to Cart
-                </button>
               </div>
             </div>
           </div>

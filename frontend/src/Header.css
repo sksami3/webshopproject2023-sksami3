@@ -1,0 +1,57 @@
+.navbar-custom {
+  background-color: #563d7c;
+}
+
+.navbar-custom .navbar-brand {
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.navbar-custom .nav-link {
+  color: white !important;
+  margin-right: 15px;
+}
+
+.navbar-custom .nav-link:hover {
+  color: #ddd !important;
+}
+
+.navbar-custom .logout-button,
+.navbar-custom .login-button,
+.navbar-custom .cart-button {
+  color: white !important;
+  border-color: white !important;
+  margin-left: 10px;
+}
+
+.navbar-custom .cart-button {
+  background-color: transparent;
+  border: none;
+  color: white !important;
+  cursor: pointer;
+}
+
+.navbar-custom .cart-button:hover {
+  color: #ddd !important;
+}
+
+.jumbotron {
+  background-color: #563d7c;
+  color: white;
+  padding: 2rem 1rem;
+  text-align: left;
+}
+
+.jumbotron h1 {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.jumbotron p {
+  font-size: 1.2rem;
+}
+
+.navbar .ms-auto .nav-item span {
+  color: white;
+}

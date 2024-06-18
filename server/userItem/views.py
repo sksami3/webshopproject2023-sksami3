@@ -17,9 +17,22 @@ def user_item_list(request, format=None):
     elif request.method == 'POST':
         serializer = userItemSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Check if an item exists with the same user and item, and is not purchased
+            user = serializer.validated_data.get('user')
+            item = serializer.validated_data.get('item')
+            existing_item = userItem.objects.filter(user=user, item=item, isPurchased=False).exists()
+
+            if existing_item:
+                # If an existing unpurchased item is found, return an error response
+                return Response({"error": "An unpurchased item already exists for this user-item combination."},
+                                status=status.HTTP_400_BAD_REQUEST)
+            else:
+                # Save the new entry if no conflicts are found
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            # Return errors if the serializer is not valid
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT'])
 def user_item_detail(request, id, format=None):

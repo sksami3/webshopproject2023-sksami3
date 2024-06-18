@@ -9,11 +9,13 @@ import { CartContext } from "../context/cart.js";
 import AuthService from "../services/AuthService.js";
 // import "../components/CartStyles.css";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Cart = ({ showModal, toggle }) => {
   const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } =
     useContext(CartContext);
   const [loggedInUser, setloggedInUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const user = AuthService.getUserFromToken();
@@ -88,13 +90,13 @@ const Cart = ({ showModal, toggle }) => {
       Swal.fire({
         title: "Price Update",
         text: message,
-        icon: "warning",
+        icon: "question",
         showCancelButton: true,
         confirmButtonText: "OK",
         cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.isConfirmed) {
-          purchase(loggedInUser, clearCart, notify);
+          purchase(loggedInUser, clearCart, notify, navigate);
         } else if (result.dismiss === Swal.DismissReason.cancel) {
         }
       });
@@ -221,7 +223,9 @@ function generatePriceUpdateMessage(updatedPriceList) {
   }
 }
 
-async function purchase(loggedInUser, clearCart, notify) {
+async function purchase(loggedInUser, clearCart, notify, navigate) {
+  console.log(navigate)
+  let isClicked = false;
   try {
     const response = await fetch(USERITEMSERVICE + "/purchaseItems/", {
       method: "POST",
@@ -230,13 +234,35 @@ async function purchase(loggedInUser, clearCart, notify) {
       },
       body: JSON.stringify({ user: loggedInUser.userId }),
     });
-
     if (response.ok) {
-      notify("Purchase completed successfully!", "success");
+      Swal.fire({
+        title: "Congratulations",
+        text: "Purchase completed successfully!",
+        icon: "success",
+        showCancelButton: true,
+        showConfirmButton: false,
+        cancelButtonText: "Close",
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.cancel) {
+          isClicked = true;
+          navigate("/shop", { replace: true });
+        }
+      });
       clearCart();
     } else {
-      console.log(await response.error.text());
-      notify(response.error, "error");
+      const data = await response.json();
+      console.log(data.error);
+      // notify(data.error, "error");
+      Swal.fire({
+        title: "Information",
+        text: data.error,
+        icon: "info",
+        showCancelButton: true,
+        showConfirmButton: false,
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.cancel) {
+        }
+      });
     }
   } catch (error) {
     console.error("Error during purchase:", error);

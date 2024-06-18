@@ -1,0 +1,93 @@
+/* Basic Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    font-family: 'Arial', sans-serif;
+}
+
+/* Container and Row */
+.container {
+    width: 100%;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col-12, .col-4, .col-md-3 {
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+/* Card styling */
+.Card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.Card:hover {
+    transform: translateY(-5px);
+}
+
+.CardImg {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.CardTitle {
+    padding: 16px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Buttons */
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Filter Input */
+input[type="text"] {
+    padding: 10px;
+    margin-top: 10px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Breadcrumb */
+.Breadcrumb {
+    background: transparent;
+    padding: 10px 0;
+}
+
+.BreadcrumbItem + .BreadcrumbItem::before {
+    content: ">";
+    padding: 0 8px;
+    color: #333;
+}

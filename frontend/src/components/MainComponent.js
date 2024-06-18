@@ -10,6 +10,7 @@ import Header from './HeaderComponent';
 import SignUp from './SignUpComponent';
 import EditUser from './EditUserComponent';
 import AuthService from '../services/AuthService';
+import Footer from './Footer';
 
 const Main = () => {
   const [items, setItems] = useState([]);
@@ -126,6 +127,7 @@ const Main = () => {
         />
         <Route path="/" element={<Shop items={items.filter((item) => item.created_by_id !== parseInt(loggedInUserId, 10))} />} />
       </Routes>
+      <Footer />
     </div>
   );
 };

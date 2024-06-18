@@ -16,6 +16,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { STATICSERVICE } from "../constants.js";
 import AuthService from "../services/AuthService.js";
+import "../../src/Shop.css"; 
 
 function RenderShop({ item, cartItems }) {
   const { addToCart, removeFromCart } = useContext(CartContext);
@@ -173,7 +174,7 @@ const Shop = (props) => {
   };
 
   return (
-    <div className="container">
+    <div className="container fullHeight">
       <div className="row">
         <Breadcrumb>
           <BreadcrumbItem>

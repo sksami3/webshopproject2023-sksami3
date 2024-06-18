@@ -3,6 +3,8 @@ import { createContext, useState, useEffect } from "react";
 import { USERITEMSERVICE } from "../constants.js";
 import AuthService from "../services/AuthService.js";
 import "../../src/cartStyles.css"; 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
@@ -37,7 +39,7 @@ export const CartProvider = ({ children }) => {
 
     const interval = setInterval(() => {
       fetchUserAndCartItems();
-    }, 5000);
+    }, 8000);
   
     return () => clearInterval(interval);
   }, []);
@@ -92,14 +94,23 @@ export const CartProvider = ({ children }) => {
         }),
       });
 
+      const responseData = await response.json();
       if (!response.ok) {
-        throw new Error("Failed to update cart");
+        toast["error"](responseData.non_field_errors[0], {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+        });
       }
 
-      const responseData = await response.json();
       console.log("Cart updated:", responseData);
     } catch (error) {
       console.error("Error updating cart:", error);
+      // notify("Error updating cart:", error);
     }
   };
 
@@ -163,6 +174,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
+    <><ToastContainer />
     <CartContext.Provider
       value={{
         cartItems,
@@ -173,7 +185,7 @@ export const CartProvider = ({ children }) => {
       }}
     >
       {children}
-    </CartContext.Provider>
+    </CartContext.Provider></>
   );
 };
 

@@ -51,3 +51,36 @@ address {
 .addToCartButton:hover {
   background-color: #0056b3;
 }
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+  padding: 20px; /* Adjust padding as needed */
+}
+
+footer {
+  background-color: #563d7c;
+  color: white;
+  padding: 0.5rem 0;
+  text-align: center;
+  width: 100%;
+  margin-top: auto;
+}
+
+.fullHeight {
+  min-height: 100vh; 
+  display: flex;
+  flex-direction: column;
+}

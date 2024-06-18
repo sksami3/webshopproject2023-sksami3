@@ -4,56 +4,62 @@ import {
   Card,
   CardTitle,
   CardImg,
-  CardImgOverlay,
   Breadcrumb,
   BreadcrumbItem,
 } from "reactstrap";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { STATICSERVICE } from "../constants.js";
+import "../../src/Shop.css"; 
 
 function RenderMyItems({ item, onClk }) {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
 
   const handleButtonClick = (item) => {
     console.log("Button clicked for item:", item);
-    navigation('/editItem/' + item.id);
+    navigate("/editItem/" + item.id);
   };
 
   return (
-    <Card>
+    <Card className="mb-4">
       <CardImg
-            style={{
-              height: "200px", 
-              width: "100%", 
-              objectFit: "fill", 
-            }}
-            object
-            src={item.image ? STATICSERVICE + item.image : process.env.PUBLIC_URL + "/No_Image_Available.jpg"}
-            alt={item.name}
-          />
+        style={{
+          height: "200px",
+          width: "100%",
+          objectFit: "fill",
+        }}
+        src={
+          item.image
+            ? STATICSERVICE + item.image
+            : 
+            process.env.PUBLIC_URL + "/No_Image_Available.jpg"
+        }
+        alt={item.title}
+      />
       <CardTitle>
-        <strong />
-        Title: {item.title}
+        <strong>Title:</strong> {item.title}
       </CardTitle>
-      <CardTitle>Price: {item.price}</CardTitle>
-      <CardTitle>Quantity: {item.quantity}</CardTitle>
+      <CardTitle>
+        <strong>Price:</strong> {item.price}
+      </CardTitle>
+      <CardTitle>
+        <strong>Quantity:</strong> {item.quantity}
+      </CardTitle>
       <button onClick={() => handleButtonClick(item)}>Edit</button>
     </Card>
   );
 }
+
 const MyItems = (props) => {
-  console.log(props);
   const myItems = props.items.map((item) => {
     return (
-      <div className="col-4 col-md-3 m-0">
-        <RenderMyItems item={item} key={item.id} />
-        <br />
+      <div className="col-10 col-md-3" key={item.id}>
+        <RenderMyItems item={item} />
       </div>
     );
   });
 
   return (
-    <div className="container">
+    <div className="container mt-4 fullHeight">
       <div className="row">
         <Breadcrumb>
           <BreadcrumbItem>
@@ -70,7 +76,15 @@ const MyItems = (props) => {
           <hr />
         </div>
       </div>
-      <div className="row">{myItems}</div>
+      <div className="row">
+        {props.items.length > 0 ? (
+          myItems
+        ) : (
+          <div className="col-12">
+            <div className="col-12 col-md-4"><p>No items available.</p></div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

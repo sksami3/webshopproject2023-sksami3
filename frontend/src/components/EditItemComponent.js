@@ -3,11 +3,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { STATICSERVICE } from "../constants";
 import AuthService from "../services/AuthService";
 import { ITEMSERVICE } from "../constants";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const EditItem = ({ item, onUpdate }) => {
-  const imagePath = STATICSERVICE + item.image;
+  const imagePath = item.image
+    ? STATICSERVICE + item.image
+    : process.env.PUBLIC_URL + "/No_Image_Available.jpg";
   const [formData, setFormData] = useState(item);
   const [previewImage, setPreviewImage] = useState(imagePath);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     setFormData(item);
@@ -78,6 +84,17 @@ const EditItem = ({ item, onUpdate }) => {
       console.log("Item updated successfully");
       const updatedItem = await response.json();
       onUpdate(updatedItem);
+      Swal.fire({
+        title: "Success",
+        text: "Item Updated!!!",
+        icon: "success",
+        showCancelButton: true,
+        showConfirmButton: false,
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.cancel) {
+          navigate('/myitems', { replace: true });
+        }
+      });
     } else {
       console.error("Failed to update item:", response.statusText);
       alert("Failed to update item. Please try again.");
@@ -101,21 +118,6 @@ const EditItem = ({ item, onUpdate }) => {
             tabIndex={-1}
           />
         </div>
-
-        {/* Add other form elements as needed */}
-        {/* For example:
-        <div className="mb-3">
-          <label className="form-label">Price:</label>
-          <input
-            type="number"
-            className="form-control"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        */}
 
         <div className="mb-3">
           <label className="form-label">Image:</label>
@@ -146,6 +148,7 @@ const EditItem = ({ item, onUpdate }) => {
             name="price"
             value={formData.price}
             onChange={handleChange}
+            min="0"
             required
           />
         </div>
@@ -158,6 +161,7 @@ const EditItem = ({ item, onUpdate }) => {
             name="quantity"
             value={formData.quantity}
             onChange={handleChange}
+            min="0"
             required
           />
         </div>

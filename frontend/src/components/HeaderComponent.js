@@ -20,6 +20,7 @@ import { CartContext } from "../context/cart.js";
 import Cart from "./Cart.js";
 import AuthService from "../services/AuthService.js";
 import { useNavigate } from "react-router-dom";
+import "../../src/Header.css"; 
 
 const Header = () => {
   const { cartItems } = useContext(CartContext);
@@ -50,7 +51,10 @@ const Header = () => {
     try {
       const { username, password } = event.target;
 
-      const loginResult = await AuthService.login(username.value, password.value);
+      const loginResult = await AuthService.login(
+        username.value,
+        password.value
+      );
 
       if (loginResult.success) {
         const loggedInUser = AuthService.getUserFromToken();
@@ -73,7 +77,7 @@ const Header = () => {
   const handleLogout = () => {
     AuthService.removeToken();
     setUser(null);
-    window.location.reload()
+    navigate('/', { replace: true });
   };
 
   const toggle = () => {
@@ -82,69 +86,73 @@ const Header = () => {
 
   return (
     <div>
-      {/* Navigation Bar */}
-      <Navbar dark expand="md">
+      <Navbar dark expand="md" className="navbar-custom">
         <div className="container">
           <NavbarToggler onClick={toggleNav} />
           <NavbarBrand className="mr-auto" href="/">
-            {/* Your logo or brand */}
+            Web Shop
           </NavbarBrand>
           <Collapse isOpen={isNavOpen} navbar>
             <Nav navbar>
-              {/* Shop Menu */}
               <NavItem>
                 <NavLink className="nav-link" to="/shop">
                   <span className="fa fa-home fa-lg"></span> Shop
                 </NavLink>
               </NavItem>
-              {/* My Items Menu */}
-              <NavItem>
-                <NavLink className="nav-link" to="/myitems">
-                  <span className="fa fa-info fa-lg"></span> My Items
-                </NavLink>
-              </NavItem>
-              {/* Add more NavItem components for other navigation links */}
+              {user && (
+                <NavItem>
+                  <NavLink className="nav-link" to="/myitems">
+                    <span className="fa fa-info fa-lg"></span> My Items
+                  </NavLink>
+                </NavItem>
+              )}
             </Nav>
             <Nav className="ms-auto" navbar>
               {user ? (
                 <>
-                  {/* User Greeting */}
                   <NavItem>
                     <span className="nav-link">Welcome, {user.username}</span>
                   </NavItem>
-                  {/* Edit Account Menu (Visible when logged in) */}
                   <NavItem>
                     <NavLink className="nav-link" to="/editUser">
-                      <span className="fa fa-address-card fa-lg"></span> Edit Account
+                      <span className="fa fa-address-card fa-lg"></span> Edit
+                      Account
                     </NavLink>
                   </NavItem>
-                  {/* Logout Button */}
                   <NavItem>
-                    <Button outline onClick={handleLogout}>
+                    <Button
+                      outline
+                      onClick={handleLogout}
+                      className="logout-button"
+                    >
                       Logout
                     </Button>
                   </NavItem>
                 </>
               ) : (
                 <>
-                  {/* Sign Up Menu */}
                   <NavItem>
                     <NavLink className="nav-link" to="/signUp">
                       <span className="fa fa-list fa-lg"></span> Sign Up
                     </NavLink>
                   </NavItem>
-                  {/* Login Button */}
                   <NavItem>
-                    <Button outline onClick={toggleModal}>
+                    <Button
+                      outline
+                      onClick={toggleModal}
+                      className="login-button"
+                    >
                       <span className="fa fa-sign-in fa-lg"></span> Login
                     </Button>
                   </NavItem>
                 </>
               )}
-              {/* Cart Button */}
               <NavItem>
                 {!showModal && (
-                  <button className="d-flex align-items-center" onClick={toggle}>
+                  <button
+                    className="d-flex align-items-center cart-button"
+                    onClick={toggle}
+                  >
                     Cart ({cartItems.length})
                   </button>
                 )}
@@ -153,20 +161,6 @@ const Header = () => {
           </Collapse>
         </div>
       </Navbar>
-
-      {/* Jumbotron */}
-      <div className="jumbotron">
-        <div className="container">
-          <div className="row row-header">
-            <div className="col-12 col-sm-6">
-              <h1>Web Shop</h1>
-              <p>Best online shopping site for Åbo Akademi University students</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Login Modal */}
       <Modal isOpen={isModalOpen} toggle={toggleModal}>
         <ModalHeader toggle={toggleModal}>Login</ModalHeader>
         <ModalBody>
@@ -192,7 +186,6 @@ const Header = () => {
         </ModalBody>
       </Modal>
 
-      {/* Cart Component */}
       <Cart showModal={showModal} toggle={toggle} />
     </div>
   );
