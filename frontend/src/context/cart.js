@@ -34,6 +34,12 @@ export const CartProvider = ({ children }) => {
     }
 
     fetchUserAndCartItems();
+
+    const interval = setInterval(() => {
+      fetchUserAndCartItems();
+    }, 5000);
+  
+    return () => clearInterval(interval);
   }, []);
 
   const addToCart = async (newItem) => {

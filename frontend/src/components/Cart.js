@@ -1,15 +1,36 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Modal } from "reactstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { STATICSERVICE } from "../constants";
+import { USERITEMSERVICE } from "../constants";
 import PropTypes from "prop-types";
 import { CartContext } from "../context/cart.js";
-// import "../components/CartStyles.css"; 
+import AuthService from "../services/AuthService.js";
+// import "../components/CartStyles.css";
+import Swal from "sweetalert2";
 
 const Cart = ({ showModal, toggle }) => {
   const { cartItems, addToCart, removeFromCart, clearCart, getCartTotal } =
     useContext(CartContext);
+  const [loggedInUser, setloggedInUser] = useState(null);
+
+  useEffect(() => {
+    const user = AuthService.getUserFromToken();
+    setloggedInUser(user);
+  }, []);
+
+  const notify = (message, type = "success") => {
+    toast[type](message, {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored",
+    });
+  };
 
   const notifyRemovedFromCart = (item) =>
     toast.error(`${item.title} removed from cart!`, {
@@ -38,13 +59,60 @@ const Cart = ({ showModal, toggle }) => {
     notifyRemovedFromCart(product);
   };
 
+  const checkPriceUpdates = async () => {
+    try {
+      const response = await fetch(USERITEMSERVICE + "/checkPriceUpdates/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: loggedInUser.userId,
+        }),
+      });
+      return await response.json();
+    } catch (error) {
+      console.error("Error during price update check:", error);
+      notify("Failed to check price updates.", "error");
+      return false;
+    }
+  };
+
+  const handlePurchase = async () => {
+    const updatedPriceList = await checkPriceUpdates();
+    if (!updatedPriceList.result) {
+      purchase(loggedInUser, clearCart, notify);
+    } else {
+      var message = generatePriceUpdateMessage(updatedPriceList);
+      message += " Would you like to proceed?";
+      Swal.fire({
+        title: "Price Update",
+        text: message,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          purchase(loggedInUser, clearCart, notify);
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+        }
+      });
+      // notify(message, "error");
+    }
+  };
+
   return (
     showModal && (
       <Modal isOpen={showModal} toggle={toggle} className="cart-modal">
         <ToastContainer />
         <div className="modal-header">
           <h2 className="modal-title">Your Cart</h2>
-          <Button className="modal-close-button" onClick={toggle} style={{ color: "red" }}>
+          <Button
+            className="modal-close-button"
+            onClick={toggle}
+            style={{ color: "red" }}
+          >
             <span className="fa fa-times"></span>
           </Button>
         </div>
@@ -53,7 +121,11 @@ const Cart = ({ showModal, toggle }) => {
             {cartItems.map((item) => (
               <div className="cart-item" key={item.id}>
                 <img
-                  src={STATICSERVICE + item.image || "./No_Image_Available.jpg"}
+                  src={
+                    item.image
+                      ? STATICSERVICE + item.image
+                      : process.env.PUBLIC_URL + "/No_Image_Available.jpg"
+                  }
                   alt={item.title}
                   className="rounded-md w-24 h-24"
                   style={{
@@ -64,6 +136,17 @@ const Cart = ({ showModal, toggle }) => {
                 <div className="cart-item-info">
                   <h3 className="cart-item-title">{item.title}</h3>
                   <p className="cart-item-price">Unit Price: ${item.price}</p>
+                  <h3
+                    className="cart-item-title"
+                    style={{
+                      color:
+                        item.ordered_quantity > item.quantity
+                          ? "red"
+                          : "inherit",
+                    }}
+                  >
+                    Available Quantity: {item.quantity}
+                  </h3>
                 </div>
                 <div className="cart-item-actions">
                   <Button
@@ -72,7 +155,9 @@ const Cart = ({ showModal, toggle }) => {
                   >
                     +
                   </Button>
-                  <span className="cart-item-quantity">{item.ordered_quantity}</span>
+                  <span className="cart-item-quantity">
+                    {item.ordered_quantity}
+                  </span>
                   <Button
                     className="cart-item-action-button"
                     onClick={() => {
@@ -95,6 +180,7 @@ const Cart = ({ showModal, toggle }) => {
             <h2 className="cart-total-title">Total: ${getCartTotal()}</h2>
             <Button
               className="cart-clear-button"
+              style={{ float: "left" }}
               onClick={() => {
                 clearCart();
                 notifyCartCleared();
@@ -102,18 +188,60 @@ const Cart = ({ showModal, toggle }) => {
             >
               Clear Cart
             </Button>
+
+            <Button
+              className="btn btn-success"
+              style={{ float: "right" }}
+              onClick={handlePurchase}
+            >
+              Pay
+            </Button>
           </div>
         ) : (
           <h3 className="cart-empty-message">Your cart is empty</h3>
         )}
       </Modal>
     )
-  )
-};  
+  );
+};
 
 Cart.propTypes = {
   showModal: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,
 };
+
+function generatePriceUpdateMessage(updatedPriceList) {
+  if (updatedPriceList.result && updatedPriceList.items.length > 0) {
+    let messages = updatedPriceList.items.map((item) => {
+      return `The price of ${item.itemName} has changed. The previous price was ${item.previousPrice} and the current price is ${item.currentPrice}.`;
+    });
+    return messages.join("\n");
+  } else {
+    return "No price updates available.";
+  }
+}
+
+async function purchase(loggedInUser, clearCart, notify) {
+  try {
+    const response = await fetch(USERITEMSERVICE + "/purchaseItems/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ user: loggedInUser.userId }),
+    });
+
+    if (response.ok) {
+      notify("Purchase completed successfully!", "success");
+      clearCart();
+    } else {
+      console.log(await response.error.text());
+      notify(response.error, "error");
+    }
+  } catch (error) {
+    console.error("Error during purchase:", error);
+    notify("Purchase process failed.", "error");
+  }
+}
 
 export default Cart;
