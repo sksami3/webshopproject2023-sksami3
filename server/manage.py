@@ -9,6 +9,10 @@ def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
     try:
         from django.core.management import execute_from_command_line
+         # Create new migrations based on model changes
+        execute_from_command_line(['manage.py', 'makemigrations', '--noinput'])
+        # Apply migrations
+        execute_from_command_line(['manage.py', 'migrate', '--noinput'])
     except ImportError as exc:
         raise ImportError(
             "Couldn't import Django. Are you sure it's installed and "

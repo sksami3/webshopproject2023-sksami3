@@ -78,6 +78,7 @@ const Header = () => {
     AuthService.removeToken();
     setUser(null);
     navigate('/', { replace: true });
+    window.location.reload();
   };
 
   const toggle = () => {
@@ -172,12 +173,6 @@ const Header = () => {
             <FormGroup>
               <Label htmlFor="password">Password</Label>
               <Input type="password" id="password" name="password" />
-            </FormGroup>
-            <FormGroup check>
-              <Label check>
-                <Input type="checkbox" name="remember" />
-                Remember me
-              </Label>
             </FormGroup>
             <Button type="submit" value="submit" color="primary">
               Login

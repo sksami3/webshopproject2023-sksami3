@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure--=-tlp&hx2b@e=obt!@yvn1*puytj#jes_-h0$d83&aokvte5+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,7 +48,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -77,9 +76,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
+# Allow specific HTTP methods
+CORS_ALLOW_METHODS = [
+    'GET',
+    'HEAD',
+    'POST',
+    'OPTIONS',
+    'PUT',
+    'PATCH',
+    'DELETE',
+]
+
+# Allow specific headers
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+]
+
 CORS_ALLOWED_ORIGINS = [
     "http://*",
     "https://*",
+    "http://localhost:3000",  
+    "http://127.0.0.1:3000",   
 ]
 
 REST_FRAMEWORK = {

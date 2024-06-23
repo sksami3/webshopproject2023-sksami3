@@ -22,6 +22,52 @@ const Cart = ({ showModal, toggle }) => {
     setloggedInUser(user);
   }, []);
 
+  const purchase = async (loggedInUser, clearCart, notify, navigate) => {
+    let isClicked = false;
+    try {
+      const response = await fetch(USERITEMSERVICE + "/purchaseItems/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user: loggedInUser.userId }),
+      });
+      if (response.ok) {
+        Swal.fire({
+          title: "Congratulations",
+          text: "Purchase completed successfully!",
+          icon: "success",
+          showCancelButton: true,
+          showConfirmButton: false,
+          cancelButtonText: "Close",
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.cancel) {
+            isClicked = true;
+            navigate("/shop", { replace: true });
+            window.location.reload();
+          }
+        });
+        clearCart();
+      } else {
+        const data = await response.json();
+        console.log(data.error);
+        Swal.fire({
+          title: "Information",
+          text: data.error,
+          icon: "info",
+          showCancelButton: true,
+          showConfirmButton: false,
+        });
+      }
+
+      return isClicked;
+    } catch (error) {
+      console.error("Error during purchase:", error);
+      notify("Purchase process failed.", "error");
+    }
+  };
+  
+
   const notify = (message, type = "success") => {
     toast[type](message, {
       position: "top-center",
@@ -83,7 +129,9 @@ const Cart = ({ showModal, toggle }) => {
   const handlePurchase = async () => {
     const updatedPriceList = await checkPriceUpdates();
     if (!updatedPriceList.result) {
-      purchase(loggedInUser, clearCart, notify);
+      var isClicked = purchase(loggedInUser, clearCart, notify, navigate);
+      if(!isClicked)
+        window.location.reload();
     } else {
       var message = generatePriceUpdateMessage(updatedPriceList);
       message += " Would you like to proceed?";
@@ -97,10 +145,8 @@ const Cart = ({ showModal, toggle }) => {
       }).then((result) => {
         if (result.isConfirmed) {
           purchase(loggedInUser, clearCart, notify, navigate);
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
         }
       });
-      // notify(message, "error");
     }
   };
 
@@ -220,53 +266,6 @@ function generatePriceUpdateMessage(updatedPriceList) {
     return messages.join("\n");
   } else {
     return "No price updates available.";
-  }
-}
-
-async function purchase(loggedInUser, clearCart, notify, navigate) {
-  console.log(navigate)
-  let isClicked = false;
-  try {
-    const response = await fetch(USERITEMSERVICE + "/purchaseItems/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ user: loggedInUser.userId }),
-    });
-    if (response.ok) {
-      Swal.fire({
-        title: "Congratulations",
-        text: "Purchase completed successfully!",
-        icon: "success",
-        showCancelButton: true,
-        showConfirmButton: false,
-        cancelButtonText: "Close",
-      }).then((result) => {
-        if (result.dismiss === Swal.DismissReason.cancel) {
-          isClicked = true;
-          navigate("/shop", { replace: true });
-        }
-      });
-      clearCart();
-    } else {
-      const data = await response.json();
-      console.log(data.error);
-      // notify(data.error, "error");
-      Swal.fire({
-        title: "Information",
-        text: data.error,
-        icon: "info",
-        showCancelButton: true,
-        showConfirmButton: false,
-      }).then((result) => {
-        if (result.dismiss === Swal.DismissReason.cancel) {
-        }
-      });
-    }
-  } catch (error) {
-    console.error("Error during purchase:", error);
-    notify("Purchase process failed.", "error");
   }
 }
 

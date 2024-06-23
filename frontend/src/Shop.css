@@ -91,3 +91,15 @@ input[type="text"] {
     padding: 0 8px;
     color: #333;
 }
+.blinking-link {
+    animation: blinker 1.5s linear infinite;
+    color: red;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+  
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }

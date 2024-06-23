@@ -36,9 +36,7 @@ function RenderItem({ item }) {
                 }}
                 object
                 src={
-                  item.image
-                    ? STATICSERVICE + item.image
-                    : "./No_Image_Available.jpg"
+                  item.image ? STATICSERVICE + item.image : process.env.PUBLIC_URL + "/No_Image_Available.jpg"
                 }
                 alt={item.name}
               />

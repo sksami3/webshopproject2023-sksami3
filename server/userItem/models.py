@@ -10,8 +10,8 @@ class userItem(models.Model):
     isPriceUpdated = models.BooleanField(default=False)  
     previousPrice = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True) 
 
-    class Meta:
-        unique_together = ('user', 'item', 'isPurchased')  # Ensure that the same user can't have the same item multiple times
+    # class Meta:
+    #     unique_together = ('user', 'item', 'isPurchased')  # Ensure that the same user can't have the same item multiple times
 
     def __str__(self):
         return f'{self.user.username} - {self.item.title} ({self.ordered_quantity})'

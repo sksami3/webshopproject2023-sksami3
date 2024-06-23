@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "../services/AuthService";
 import { ITEMSERVICE } from "../constants";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const AddItem = ({ addItemAndUpdateState }) => {
+  const navigate = useNavigate();
   const initialFormData = {
     title: "",
     image: null,
@@ -78,6 +81,17 @@ const AddItem = ({ addItemAndUpdateState }) => {
       });
 
       if (response.ok) {
+        Swal.fire({
+          title: "success",
+          text: "Item added successfully!!",
+          icon: "success",
+          showCancelButton: true,
+          showConfirmButton: false,
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.cancel) {
+            navigate('/myitems', { replace: true });
+          }
+        });
         console.log("Item added successfully");
         // Reset the form after successful submission if needed
         setFormData(initialFormData);
