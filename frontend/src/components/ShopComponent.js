@@ -180,6 +180,7 @@ const Shop = (props) => {
   const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
   const [fileExists, setFileExists] = useState(false);
   const [credFilePath, setCredFilePath] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     // Check if the file exists when the component mounts
@@ -214,6 +215,7 @@ const Shop = (props) => {
   }, []);
 
   const handlePopulateDB = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(USERSSERVICE + "/auto_migration", {
         method: "GET",
@@ -248,6 +250,8 @@ const Shop = (props) => {
     } catch (error) {
       console.error("Error populating database:", error);
       alert("An error occurred while populating the database.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -290,8 +294,12 @@ const Shop = (props) => {
           <div className="col-5">
             <div className="row">
               <div className="col-4">
-                <button onClick={handlePopulateDB} className="btn btn-primary">
-                  Populate DB
+                <button
+                  onClick={handlePopulateDB}
+                  className="btn btn-primary"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Loading..." : "Populate DB"}
                 </button>
               </div>
               {fileExists && (
