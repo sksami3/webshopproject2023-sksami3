@@ -24,8 +24,8 @@ This project includes a Docker setup for ease of deployment and consistency acro
    ```
 4. To pull the Docker images directly from Docker Hub, use:
    ```sh
-   docker pull sksami3/web-shop-frontend:1.0.0
-   docker pull sksami3/web-shop-backend:1.0.0
+   docker pull sksami3/web-shop-frontend:1.0.1
+   docker pull sksami3/web-shop-backend:1.0.1
    ```
 
 ### Running Manually
