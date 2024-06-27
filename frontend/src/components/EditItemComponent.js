@@ -14,7 +14,6 @@ const EditItem = ({ item, onUpdate }) => {
   const [previewImage, setPreviewImage] = useState(imagePath);
   const navigate = useNavigate();
 
-
   useEffect(() => {
     setFormData(item);
     setPreviewImage(imagePath);
@@ -92,7 +91,7 @@ const EditItem = ({ item, onUpdate }) => {
         showConfirmButton: false,
       }).then((result) => {
         if (result.dismiss === Swal.DismissReason.cancel) {
-          navigate('/myitems', { replace: true });
+          navigate("/myitems", { replace: true });
         }
       });
     } else {
@@ -149,6 +148,7 @@ const EditItem = ({ item, onUpdate }) => {
             value={formData.price}
             onChange={handleChange}
             min="0"
+            step="any"
             required
           />
         </div>
@@ -180,7 +180,25 @@ const EditItem = ({ item, onUpdate }) => {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <div className="mb-3">
+          <label className="form-label">Status:</label>
+          <div>
+            <span
+              style={{
+                color: formData.quantity === 0 ? "red" : "green",
+                fontWeight: "bold",
+              }}
+            >
+              {formData.quantity === 0 ? "Sold/Purchased" : "On Sale"}
+            </span>
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={formData.quantity === 0}
+        >
           Save Changes
         </button>
       </form>

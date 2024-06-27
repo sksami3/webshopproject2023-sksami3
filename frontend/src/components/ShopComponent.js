@@ -109,11 +109,25 @@ function RenderShop({ item, cartItems }) {
           </CardTitle>
           <CardTitle>Price: {item.price}</CardTitle>
           <CardTitle>Quantity: {item.quantity}</CardTitle>
+          <CardTitle>
+            <strong>Status:</strong>{" "}
+            <span
+              style={{
+                color: item.quantity === 0 ? "red" : "green",
+                fontWeight: "bold",
+              }}
+            >
+              {item.quantity === 0 ? "Sold/Purchased" : "On Sale"}
+            </span>
+          </CardTitle>
         </Link>
         {/* <button onClick={() => handleButtonClick(item)}>Add to Chart</button> */}
         {!cartItems.find((cartItem) => cartItem.id === item.id) ? (
           <button
-            className="d-flex align-items-center justify-content-center addToCartButton"
+            className={`d-flex align-items-center justify-content-center addToCartButton ${
+              item.quantity === 0 ? "disabled-button" : ""
+            }`}
+            disabled={item.quantity === 0}
             onClick={() => {
               handleAddToCartClick(item);
             }}

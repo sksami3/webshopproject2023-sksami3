@@ -9,7 +9,7 @@ import {
 } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { STATICSERVICE } from "../constants.js";
-import "../../src/Shop.css"; 
+import "../../src/Shop.css";
 
 function RenderMyItems({ item, onClk }) {
   const navigate = useNavigate();
@@ -30,8 +30,7 @@ function RenderMyItems({ item, onClk }) {
         src={
           item.image
             ? STATICSERVICE + item.image
-            : 
-            process.env.PUBLIC_URL + "/No_Image_Available.jpg"
+            : process.env.PUBLIC_URL + "/No_Image_Available.jpg"
         }
         alt={item.title}
       />
@@ -43,6 +42,17 @@ function RenderMyItems({ item, onClk }) {
       </CardTitle>
       <CardTitle>
         <strong>Quantity:</strong> {item.quantity}
+      </CardTitle>
+      <CardTitle>
+        <strong>Status:</strong>{" "}
+        <span
+          style={{
+            color: item.quantity === 0 ? "red" : "green",
+            fontWeight: "bold",
+          }}
+        >
+          {item.quantity === 0 ? "Sold/Purchased" : "On Sale"}
+        </span>
       </CardTitle>
       <button onClick={() => handleButtonClick(item)}>Edit</button>
     </Card>
@@ -68,7 +78,9 @@ const MyItems = (props) => {
           <BreadcrumbItem active>My Items</BreadcrumbItem>
         </Breadcrumb>
         <div className="col-12">
-          <Link to="/AddItem">Add New Item</Link>
+          <Link to="/AddItem" className="add-item-button">
+            Add New Item
+          </Link>
           <hr />
         </div>
         <div className="col-12">
@@ -81,7 +93,9 @@ const MyItems = (props) => {
           myItems
         ) : (
           <div className="col-12">
-            <div className="col-12 col-md-4"><p>No items available.</p></div>
+            <div className="col-12 col-md-4">
+              <p>No items available.</p>
+            </div>
           </div>
         )}
       </div>

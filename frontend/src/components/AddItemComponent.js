@@ -152,6 +152,7 @@ const AddItem = ({ addItemAndUpdateState }) => {
             value={formData.price}
             onChange={handleChange}
             min={0}
+            step="any"
             required
           />
         </div>

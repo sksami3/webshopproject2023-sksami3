@@ -103,3 +103,23 @@ input[type="text"] {
       opacity: 0;
     }
   }
+
+  .addToCartButton.disabled-button {
+    background-color: grey; /* Color when disabled */
+    color: lightgrey;
+    cursor: not-allowed;
+  }
+
+  .add-item-button {
+    background-color: #28a745; /* Custom green color */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .add-item-button:hover {
+    background-color: #218838; /* Darker green on hover */
+    color: white;
+  }
