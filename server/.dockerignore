@@ -1,0 +1,20 @@
+# Ignore Docker related files
+.dockerignore
+docker-compose.yml
+
+# Ignore version control directories and files
+.git
+.gitignore
+
+# Ignore Python cache and compiled files
+__pycache__
+*.pyc
+
+# Ignore Django related files
+*.sqlite3
+*.pyc
+*.pyo
+
+# Ignore frontend build files (if applicable)
+frontend/build
+frontend/node_modules
