@@ -8,7 +8,7 @@
 
 ## Project Overview
 
-This project implements a fully functional web shop with backend and frontend components. All optional requirements have been implemented, including a feature that allows sellers to add items with multiple quantities, edit these quantities, and automatically categorize items as sold when all quantities are purchased.
+This project implements a fully functional web shop with backend and frontend components. **All optional requirements have been implemented**, including a feature that allows sellers to add items with multiple quantities, edit these quantities, and automatically categorize items as sold when all quantities are purchased.
 
 ## How to Run the Project
 
@@ -18,11 +18,14 @@ This project includes a Docker setup for ease of deployment and consistency acro
 
 1. Ensure Docker and Docker Compose are installed on your system.
 2. Clone the repository and navigate to the project root.
-3. Use the following Docker Compose command to build and start the services:
+3. Navigate to the directory where the `docker-compose.yml` file is situated.
+4. Use the following Docker Compose command to build and start the services:
    ```sh
    docker-compose up --build
    ```
-4. To pull the Docker images directly from Docker Hub, use:
+5. Open your browser and go to [http://localhost:3000](http://localhost:3000) to view the app.
+
+To pull the Docker images directly from Docker Hub, use: (Optional)
    ```sh
    docker pull sksami3/web-shop-frontend:1.0.1
    docker pull sksami3/web-shop-backend:1.0.1
@@ -53,5 +56,5 @@ If you prefer not to use Docker, you can run the project manually by setting up 
 
 ## Additional Information
 
-- The `root` folder of the project contains the `requirements.txt` file necessary for the backend setup.
+- The `server` folder of the project contains the `requirements.txt` file necessary for the backend setup.
 - The `frontend` folder contains the `package.json` file listing all Node.js dependencies and includes both `src` and `build` folders for source files and production builds, respectively.
