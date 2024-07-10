@@ -11,6 +11,8 @@ import SignUp from './SignUpComponent';
 import EditUser from './EditUserComponent';
 import AuthService from '../services/AuthService';
 import Footer from './Footer';
+import { ITEMSERVICE } from "../constants";
+import { USERSSERVICE } from "../constants";
 
 const Main = () => {
   const [items, setItems] = useState([]);
@@ -35,7 +37,7 @@ const Main = () => {
 
   const fetchItems = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/item');
+      const response = await fetch(ITEMSERVICE);
       if (response.ok) {
         const data = await response.json();
         setItems(data);
@@ -51,7 +53,7 @@ const Main = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/user');
+        const response = await fetch(USERSSERVICE);
         if (response.ok) {
           const data = await response.json();
           setUsers(data);
